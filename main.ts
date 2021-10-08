@@ -3,17 +3,18 @@ import {
     isHttpError,
     Status,
 } from "https://deno.land/x/oak@v9.0.0/mod.ts";
+import { getNetworkAddr } from 'https://deno.land/x/local_ip@0.0.3/mod.ts';
 import router from './routes/index.ts'
 
+// 需要加载 sudo apt install net-tools
+const netAddr = await getNetworkAddr(); 
 
 // 获取环境变量
 const env = Deno.env.toObject();
 const PORT = env.PORT || 3000;
-const HOST = env.HOST || "127.0.0.1";
+const HOST = env.HOST || netAddr;
 
 const app = new Application();
-
-
 
 app.use(router.routes());
 app.use(router.allowedMethods());
